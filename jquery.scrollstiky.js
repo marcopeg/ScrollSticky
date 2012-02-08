@@ -14,7 +14,7 @@
 		
 		// Stiky Happens!
 		if ( _scrollTop >= this.stikyStart ) {
-			if ( this.cfg.onStiky.call( this.$, this, e ) === false ) return;
+			if ( this.cfg.onStiky.call( this.$, scrollTop, this, e ) === false ) return;
 			
 			this.$.css({
 				position: 	this.cfg.stikyPosition,
@@ -24,7 +24,7 @@
 			
 		// Unstiky Happens!
 		} else {
-			if ( this.cfg.onUnstiky.call( this.$, this, e ) === false ) return;
+			if ( this.cfg.onUnstiky.call( this.$, scrollTop, this, e ) === false ) return;
 			
 			this.$.css({
 				position: 'relative',
@@ -47,8 +47,8 @@
 		var config = $.extend({},{
 			stikyStart:		'auto',
 			
-			onStiky:		function() {},
-			onUnstiky:		function() {},
+			onStiky:		function( scrollTop, obj, e ) {},
+			onUnstiky:		function( scrollTop, obj, e ) {},
 			scrolling:		function( scrollTop, obj, e ) {},
 			
 			stikyPosition:	'fixed',
