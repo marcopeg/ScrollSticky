@@ -10,6 +10,7 @@
 	
 	_check = function( scrollTop, e ) {
 		
+		this.cfg.scrolling.call( this.$, scrollTop, this, e );
 		
 		// Stiky Happens!
 		if ( _scrollTop >= this.stikyStart ) {
@@ -48,6 +49,7 @@
 			
 			onStiky:		function() {},
 			onUnstiky:		function() {},
+			scrolling:		function( scrollTop, obj, e ) {},
 			
 			stikyPosition:	'fixed',
 			stikyTop:		0,
