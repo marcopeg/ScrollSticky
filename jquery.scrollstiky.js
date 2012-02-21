@@ -14,6 +14,9 @@
 		
 		// Stiky Happens!
 		if ( _scrollTop >= this.stikyStart ) {
+			
+			// Check if it is already stiky to prevent multiple call to "onSticky" callback!
+			
 			if ( this.cfg.onStiky.call( this.$, scrollTop, this, e ) === false ) return;
 			
 			this.$.css({
