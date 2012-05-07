@@ -43,6 +43,8 @@
 			
 			}
 			
+			this.$.data('scrollSticky-style', this.$.attr('style') );
+			
 			// Sticky the element
 			this.$.css({
 				position: 	this.cfg.stickyPosition,
@@ -72,6 +74,9 @@
 				top:		'auto'
 			}).removeClass(this.cfg.stickyClass);
 			
+			this.$.removeAttr('style');
+			this.$.attr('style',this.$.data('scrollSticky-style'));
+			
 		}
 		
 	} // EndOf: "_check()"
@@ -95,7 +100,7 @@
 			stickyPosition:		'fixed',
 			stickyTop:			0,
 			stickyZIndex:		9999,
-			stickyClass:			'scrollsticky',
+			stickyClass:		'scrollsticky',
 			
 			usePlaceholder:		true,
 			placeholderClass:	'scrollsticky-placeholder'
@@ -163,6 +168,19 @@
 	});
 	
 	// Trigger the first scroll event to activate the scrollSticky plugin.
-	$(document).ready(function(){ $(document).trigger('scroll'); });
+	// Delayed instruction is mandatory with firefox.
+	$(document).ready(function(){ 
+		
+		// Webkit version
+		if ( $.browser.webkit ) {
+			$(window).scroll( $(window).scrollTop() );
+		
+		// Other browsers version
+		} else {
+			setTimeout(function(){ $(window).trigger('scroll'); },1);
+			
+		}
+		
+	 });
 	
 })(jQuery);
