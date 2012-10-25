@@ -17,50 +17,6 @@
 		
 		
 		
-		<!-- Functional Script: this activate/deactivate MediaTable -->
-		<script type="text/javascript">
-		$(document).ready(function(){
-			
-			// Don't care about this code... it display a scrollTop value in the bottomRight side of the viewport!
-			$(window).scroll(function(){
-				
-				var $log;
-				if ( $('#log').length == 0 ) {
-					$('body').append('<div id="log" style="position:fixed;bottom:10px;right:10px;font-size:2em;color:red;">');
-				}
-				
-				$log = $('#log');
-				
-				$log.html( $(window).scrollTop() );
-			
-			});
-			
-			
-			// First 3 items doesn't needs any configuration.
-			// They will be sticked to the top of thw viewport!
-			$('#bubble1,#bubble2,#bubble3').scrollSticky();
-			
-			
-			// Others bubbles needs to know when to sticky and where!
-			$('#bubble4').scrollSticky({
-				stickyStart: 1058,
-				stickyTop: 110
-			});
-			
-			$('#bubble5').scrollSticky({
-				stickyStart: 1200,
-				stickyTop: 110
-			});
-			
-			$('#bubble6').scrollSticky({
-				stickyStart: 1300,
-				stickyTop: 215
-			});
-			
-			
-			
-		});
-		</script>
 		
 		<!-- Page Style, don't care about this code -->
 		<style type="text/css">
@@ -69,20 +25,17 @@
 		a { color:#0063c5}
 		h1,h2 { margin:0; font-weight:normal; }
 		h2 { font-size:1em; margin-bottom:2em; }
-		.article { border-top:1px solid #444;border-bottom:1px solid #444;margin-bottom:2em;font-size:0.85em;line-height: 1.3em; color:#333; padding:0;}
+		.article { border-top:1px solid #444;border-bottom:1px solid #444;margin-bottom:2em;font-size:1.2em;line-height: 1.4em; color:#333; padding:0;}
 		.controls { text-align: center;margin-bottom:2em;}
 		.controls input { font-size:1em; padding:0.5em; }
 		#create { color:green }
 		#destroy { color:#900 }
 		.credits { margin-top:3em;text-align: center;font-size:0.8em; background: #ddd; text-shadow: 0 1px 0 #fff; padding:0.2em; }
-		.mediaTable { font-size:0.8em;}
 		</style>
 		
 		
 <style type="text/css">
-/* ============================================================================================================================
-== OVAL SPEECH BUBBLE WITH QUOTATION MARKS (more CSS3)
-** ============================================================================================================================ */
+
 .oval-quotes-wrap, .oval-quotes {
 	position:relative;
 	width:300px;
@@ -116,6 +69,16 @@
 	text-shadow: 0 1px 0 #fff;
 }
 
+
+.clearfix-arrow {
+	display: block;
+	width:400px;
+	height:400px;
+	margin: 100px auto;
+	background-image: url(data:image/jpeg;base64,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);
+	background-size: contain;
+}
+
 </style>
 		
 		<!--[if lt IE 9]>
@@ -129,33 +92,56 @@
 		<h1>ScrollSticky jQuery Plguin</h1>
 		<h2>Sticky objects into the page before they disappear when scrolling the page!</h2>
 		
-		<div class="article" style="margin-bottom:300px">
+		<div class="article" style="margin-bottom:600px">
 			
 			<h3>What does this plugin do?</h3>
 			
 			<p>
-				<strong>ScrollSticky</strong> listen to the scroll event to change position attribute of interested objects to sticky them into the viewport.<br>
-				You can set a variety of params to control each item behavior.
+				ScrollSticky <strong>prevent an item to scroll out</strong> of the top side of a page.
 			</p>
+			
+			<code>&lt;div data-scrollsticky="true">stiky element&lt;/div></code>
+			
 			<p>
-				This is a usefull solution to <strong>fix the main menu</strong> before it go out of the viewport!
+				&gt;&gt; Start to <strong>scroll down this page</strong> and look at balloons behavior!
 			</p>
-			
-			<h3>How do I use this demo?</h3>
-			
-			<p>Just scroll down this page and look at the bubble beehavior!</p>
 			
 		</div>
 		
 		
-		<div class="oval-quotes-wrap"><div id="bubble1" class="oval-quotes" style="margin-left:0;"><p style="padding: 65px 0 0 0">ScrollSticky can be used on every HTML element!</p></div></div>
-		<div class="oval-quotes-wrap"><div id="bubble2" class="oval-quotes" style="background:lime;margin-left:340px;"><p style="padding: 65px 0 0 0">ScrollSticky allow a full automated setup!</p></div></div>
-		<div class="oval-quotes-wrap"><div id="bubble3" class="oval-quotes" style="background:fuchsia;margin-left:660px;"><p style="padding: 70px 0 0 0">ScrollSticky is incredible easy to use!</p></div></div>
-		<div class="oval-quotes-wrap"><div id="bubble4" class="oval-quotes" style="background:#00ffff;margin-left:150px;"><p style="padding: 55px 0 0 0;color:red">Even you can configure a variety of params to change dafault behavior!</p></div></div>
-		<div class="oval-quotes-wrap"><div id="bubble5" class="oval-quotes" style="background:yellow;margin-left:540px;"><p style="padding: 75px 0 0 0;color:blue">You can use it for sticky menus or just for fun!</p></div></div>
-		<div class="oval-quotes-wrap"><div id="bubble6" class="oval-quotes" style="background:blue;margin-left:360px;"><p style="padding: 80px 0 0 0;"><a href="https://github.com/thepeg/ScrollSticky" target="_blank" style="color:#fff;text-decoration:none">Enjoy it on GitHub!!</a></p></div></div>
+		<div data-scrollsticky="true" data-scrollsticky-offset="20" data-scrollsticky-clearfix="#clearfix1" data-scrollsticky-clearfix-offset="180" class="oval-quotes-wrap"><div class="oval-quotes" style="margin-left:0;"><p style="padding: 65px 0 0 0">ScrollSticky can be used on every HTML element!</p></div></div>
+		<div data-scrollsticky="true" data-scrollsticky-offset="20" data-scrollsticky-clearfix="#clearfix1" data-scrollsticky-clearfix-offset="180" class="oval-quotes-wrap"><div class="oval-quotes" style="background:lime;margin-left:340px;"><p style="padding: 65px 0 0 0">ScrollSticky allow a full automated setup!</p></div></div>
+		<div data-scrollsticky="true" data-scrollsticky-offset="20" data-scrollsticky-clearfix="#clearfix1" data-scrollsticky-clearfix-offset="180" class="oval-quotes-wrap"><div class="oval-quotes" style="background:fuchsia;margin-left:660px;"><p style="padding: 70px 0 0 0">ScrollSticky is incredible easy to use!</p></div></div>
+		<div data-scrollsticky="true" data-scrollsticky-offset="130" data-scrollsticky-clearfix="#clearfix1" data-scrollsticky-clearfix-offset="110" class="oval-quotes-wrap"><div class="oval-quotes" style="background:#00ffff;margin-left:150px;"><p style="padding: 55px 0 0 0;color:red">Even you can configure a variety of params to change default behavior!</p></div></div>
+		<div data-scrollsticky="true" data-scrollsticky-offset="130" data-scrollsticky-clearfix="#clearfix1" data-scrollsticky-clearfix-offset="110" class="oval-quotes-wrap"><div class="oval-quotes" style="background:yellow;margin-left:540px;"><p style="padding: 75px 0 0 0;color:blue">You can use it for sticky menus or just for fun!</p></div></div>
+		<div data-scrollsticky="true" data-scrollsticky-offset="245" data-scrollsticky-clearfix="#clearfix1" data-scrollsticky-clearfix-offset="30" class="oval-quotes-wrap"><div class="oval-quotes" style="background:blue;margin-left:360px;"><p style="padding: 80px 0 0 0;"><a href="https://github.com/thepeg/ScrollSticky" target="_blank" style="color:#fff;text-decoration:none">Enjoy it on GitHub!!</a></p></div></div>
 		
-		<p style="margin:400px 0">&nbsp;</p>
+		<p style="margin:300px 0">&nbsp;</p>
+		
+		
+		<div id="clearfix1" data-scrollsticky=true data-scrollsticky-offset=20 data-scrollsticky-clearfix="#clearfix2" data-scrollsticky-clearfix-offset=100 class="article">
+			
+			<h3>PushUp Behavior!</h3>
+			
+			<p>
+				ScrollSticky is able to <strong>push up sticky</strong> items when certain element comes into the page!
+			</p>
+			
+			<code>&lt;div data-scrollsticky="true" <strong>data-scrollsticky-clearfix="#swipe"</strong>>stiky element&lt;/div></code>
+			
+			<p>
+				PushUp item is identified by an <strong><em>XPath</em> rule</strong> (like CSS).
+			</p>
+			<p>
+				You can also use an <code>INT</code> value to <strong>use a distance as clearfix</strong>.<br>
+				Integer value measure distance from the bottom side of the page.
+			</p>
+			
+		</div>
+		
+		<p id="clearfix2" class="clearfix-arrow" style="margin-top:600px">&nbsp;</p>
+		
+		<p style="margin:300px 0">&nbsp;</p>
 		
 		
 		<div class="credits" style="margin-top:500px;">

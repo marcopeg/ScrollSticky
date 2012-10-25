@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+		
+		<title>ScrollSticky | Sticky objects into the page before they disappear when scrolling the page | Plugin jQuery | www.consulenza-web.com</title>
+		<meta name="description" content="jQUery Plugin Media Table: adapt HTML tables to fit many screen sizes. Uses media-query and javascript. IE proof!" />
+		
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+		
+		
+		<!-- ScrollSticky Plugin -->
+		<!-- This is all you need to copy in your page! -->
+		<script src="jquery.scrollsticky.js"></script>
+		
+		
+		
+		<!-- Functional Script: this activate/deactivate MediaTable -->
+		<script type="text/javascript">
+		$(document).ready(function(){
+
+			
+			// Apply scrollSticky to each section's title.
+			// Following title will push up current sticky item!
+			$('.article').each(function(){
+				
+				$(this).find('h3').scrollSticky({
+					offset: 		-5,
+					clearfix: 		$(this).next().find('h3'),
+					clearfixOffset: -5
+				});
+				
+			});
+			
+			
+			
+			
+		});
+		</script>
+		
+		<!-- Page Style, don't care about this code -->
+		<style type="text/css">
+		html { text-align:center; background: #fff; font-family: "Trebuchet MS"; font-size:1em; }
+		body { display:block; width:95%; margin:2em auto; text-align:left; }
+		a { color:#0063c5}
+		h1,h2 { margin:0; font-weight:normal; }
+		h2 { font-size:1em; margin-bottom:2em; }
+		.article { border-top:1px solid #444;border-bottom:1px solid #444;margin-bottom:2em;font-size:0.85em;line-height: 1.3em; color:#333; padding:0;}
+		.controls { text-align: center;margin-bottom:2em;}
+		.controls input { font-size:1em; padding:0.5em; }
+		#create { color:green }
+		#destroy { color:#900 }
+		.credits { margin-top:3em;text-align: center;font-size:0.8em; background: #ddd; text-shadow: 0 1px 0 #fff; padding:0.2em; }
+		
+		
+		/**
+		 * Example related styles
+		 */
+		.article {
+			border:none;
+			padding-bottom:80px;
+			font-size:1.2em;
+		}
+		.article h3 {
+			border:1px solid #ddd;
+			background: #eee;
+			text-shadow: 0 1px 0 #fff;
+			padding:10px 20px;
+			border-radius: 4px;
+		}
+		.article h3.scrollsticky {
+		}
+		.article p {
+			padding: 0 20px;
+		}
+		.credits {
+			margin-top:300px;
+		}
+		</style>
+
+		
+	</head>
+	<body>
+		
+		
+		<h1>ScrollSticky jQuery Plguin</h1>
+		<h2>Sticky objects into the page before they disappear when scrolling the page!</h2>
+		
+		<div class="article">
+			
+			<h3>What does this plugin do?</h3>
+			
+			<p>
+				<strong>ScrollSticky</strong> listen to the scroll event to fix targets position sticky them into the viewport.<br>
+				You can set a variety of params to control each item behavior.
+			</p>
+			<p>
+				This is a very useful solution to <strong>fix your main menu</strong> before it go out of the viewport!
+			</p>
+			
+		</div>
+		
+		<div class="article">
+			
+			
+			<h3>How do I use this demo?</h3>
+			
+			<p>Just <strong>scroll down this page</strong> and <strong>looks how titles behaves</strong> in proximity of the top of the page!</p>
+			
+		</div>
+		
+		<div class="article">
+			
+			
+			<h3>A</h3>
+			
+			<p>Just <strong>scroll down this page</strong> and looks how titles behaves in proximity of the top of the page!</p>
+			
+		</div>
+		
+		<div class="article">
+			
+			
+			<h3>B</h3>
+			
+			<p>Just scroll down this page and look at the bubble beehavior!</p>
+			
+		</div>
+		
+		<div class="article">
+			
+			
+			<h3>C</h3>
+			
+			<p>Just scroll down this page and look at the bubble beehavior!</p>
+			
+		</div>
+		
+		<div class="article">
+			
+			
+			<h3>D</h3>
+			
+			<p>Just scroll down this page and look at the bubble beehavior!</p>
+			
+		</div>
+		
+		
+				
+		<div class="credits">
+			<p>Created by <a href="http://www.consulenza-web.com/2012/05/scrollsticky-jquery-plugin/" title="Marco Pegoraro Personal Blog" target="_blank">Marco Pegoraro</a> | Fork on <a href="https://github.com/thepeg/ScrollSticky" target="_blank">GitHub</a></p>
+		</div>
+		
+				
+	</body>
+</html>

@@ -1,22 +1,95 @@
+/**
+ * ScrollSticky Plugin
+ * ===================
+ *
+ * Apply this plugin to any item to prevent them to scroll outside viewport.
+ * Useful for menus and badges.
+ *
+ * // Sticky it to the top of the page
+ * $('#target').scrollSticky();
+ *
+ * // Sticky it at 200px from the top of the page
+ * $('#target').scrollSticky({
+ *   offset: 200
+ * });
+ *
+ * // Sticky it at 200px from the top of the page then
+ * // push up at 100px from the bottom of the page
+ * $('#target').scrollSticky({
+ *   offset: 200,
+ *   clearfix: 100
+ * });
+ *
+ */
+
+
 
 ;(function($){
 	
-	var _targets, _scrollTop, _check;
+	var _targets, _scrollTop, _check, _pushUp;
 	
 	_targets = [];
 	
 	
 	
 	
+	/**
+	 * It is responsible of "push-up" behavior
+	 */ 
+	_pushUp = function( scrollTop, e ) {
+		
+		// Refresh stikyStop position to pushUp stiky element
+		_stickyStop.call( this );
+		
+		// Check for clearfix behaviors delimitation params
+		if ( !this.stickyStop || !$(this.cfg.clearfix).length ) return;
+		
+		// Dinamic calculates "stopTop" by linked clearfix item position
+		var stopTop	= this.stickyStop;
+		if ( stopTop === 'auto' ) stopTop = $(this.cfg.clearfix).first().offset().top;
+		stopTop -= scrollTop;
+		
+		// Apply an offset to the clearfix delimiter
+		if ( this.cfg.clearfixOffset ) stopTop -= this.cfg.clearfixOffset;
+		
+		
+		var stickyBottom 	= this.cfg.stickyTop + this.$.outerHeight();
+		
+		var delta = stopTop - stickyBottom;
+		
+		if ( delta < 0 ) {
+			this.$.css( 'top', this.cfg.stickyTop + delta );
+			
+		} else {
+			this.$.css( 'top', this.cfg.stickyTop );
+			
+		}
+		
+	}
+	
+	
+	
+	
+	/**
+	 * It is responsible of sticky/unsticky target object
+	 */
 	_check = function( scrollTop, e ) {
 		
+		
+		// Refresh stikyStart position if not already sticky.
+		if ( !this.$.hasClass(this.cfg.stickyClass) ) _stickyStart.call( this );
+		
+		
+		// CALLBACK: Scrolling Event
 		this.cfg.scrolling.call( this.$, scrollTop, this, e );
+		
+		
 		
 		// Sticky Happens!
 		if ( _scrollTop >= this.stickyStart ) {
 			
-			// Check if it is already sticky to prevent multiple call to "onSticky" callback!
-			if ( this.$.hasClass(this.cfg.stickyClass) ) return;
+			// Check for "pushUp" behavior and prevent multiple stiky events on the same item!
+			if ( this.$.hasClass(this.cfg.stickyClass) ) return _pushUp.call( this, scrollTop, e );
 			
 			// Throw "onSticky" callback. Return "false" to block "sticky" behavior.
 			if ( this.cfg.onSticky.call( this.$, scrollTop, this, e ) === false ) return;
@@ -26,31 +99,41 @@
 			if ( this.cfg.usePlaceholder ) {
 				
 				// Compose a placeholderID from the target object Id or from a time based id.
-				this.placeholderId = this.$.attr('id');
-				if ( !this.placeholderId ) this.placeholderId = new Date().getTime();	
-				this.placeholderId+= '-scrollsticky-placeholder';
+				//this.placeholderId = this.$.attr('id');
+				//if ( !this.placeholderId ) this.placeholderId = new Date().getTime();	
+				//this.placeholderId+= '-scrollsticky-placeholder';
 				
-				
-				this.$placeholder = $('<div>');
-				
-				this.$placeholder.css({
+				// Build placeholder
+				this.$placeholder = $('<div>',{
 					display:	'block',
 					width:		this.$.outerWidth(),
-					height:		this.$.outerHeight()
+					height:		this.$.outerHeight( this.$.css('display') === 'inline-block' ? true : false ),
+					background: '#eee'
 				}).addClass(this.cfg.placeholderClass);
 				
+				// Drop placeholder
 				this.$.after( this.$placeholder );
 			
 			}
 			
+			
+			// save actual inline stylesheet
 			this.$.data('scrollSticky-style', this.$.attr('style') );
+			
 			
 			// Sticky the element
 			this.$.css({
 				position: 	this.cfg.stickyPosition,
 				top:		this.cfg.stickyTop,
-				zIndex:		this.cfg.stickyZIndex
+				zIndex:		this.cfg.stickyZIndex,
+				width:		this.$.width(),
+				marginTop:	0
 			}).addClass(this.cfg.stickyClass);
+			
+			
+			
+			// Apply pushup to the stiky element
+			_pushUp.call( this, scrollTop, e );
 			
 			
 		// Unsticky Happens!
@@ -74,15 +157,50 @@
 				top:		'auto'
 			}).removeClass(this.cfg.stickyClass);
 			
+			// reset inline stylesheet
 			this.$.removeAttr('style');
 			this.$.attr('style',this.$.data('scrollSticky-style'));
 			
 		}
 		
+		
 	} // EndOf: "_check()"
 	
 	
+	var _stickyStart = function() {
+		
+		// Calculates the scroll value to start fixed position.
+		if ( this.cfg.stickyStart == 'auto' ) {
+			
+			// Consider object's margin-top value
+			//var offsetTop = obj.$.offset().top - parseFloat(obj.$.css('marginTop').replace("px","")) ;
+			var offsetTop = this.$.offset().top;
+			
+			this.stickyStart = offsetTop - this.cfg.stickyTop;
+			
+		} else {
+			this.stickyStart = this.cfg.stickyStart;
+			
+		}
+
+	}
 	
+	var _stickyStop = function() {
+		
+		// styckyTop string->number utility
+		if ( typeof this.cfg.stickyStop === 'string' && parseInt(this.cfg.stickyStop).toString() === this.cfg.stickyStop  ) this.cfg.stickyStop = parseInt(this.cfg.stickyStop);
+		
+		// Setup a link to the element who push up the sticky
+		if ( this.cfg.clearfix != null && typeof this.cfg.clearfix !== 'number' ) {
+			this.stickyStop = 'auto';
+		
+		// Setup a distance from the bottom edge of the page to consider as clearfix.
+		} else {
+			this.stickyStop = $('body').outerHeight() - this.cfg.clearfix;
+			
+		}
+		
+	}
 	
 	
 	
@@ -92,6 +210,7 @@
 		
 		var config = $.extend({},{
 			stickyStart:		'auto',
+			clearfix:			null,
 			
 			onSticky:			function( scrollTop, obj, e ) {},
 			onUnsticky:			function( scrollTop, obj, e ) {},
@@ -107,23 +226,20 @@
 			
 		},cfg);
 		
+		// new option name for "stickyTop"
+		if ( config.offset ) config.stickyTop = config.offset;
+		
 		$(this).each(function(){
 		
 			var obj = {
-				_:		this,
-				$:		$(this),
-				cfg:	config,
+				_:				this,
+				$:				$(this),
+				cfg:			config,
 				stickyStart:	0,
+				stickyStop:		null,
 				
-				placeholderId: null,
+				placeholderId: 	null,
 				$placeholder:	null
-			}
-			
-			// Calculates the scroll value to start fixed position.
-			if ( obj.cfg.stickyStart == 'auto' ) {
-				obj.stickyStart = obj.$.offset().top;
-			} else {
-				obj.stickyStart = obj.cfg.stickyStart;
 			}
 			
 			// Check object presence in _targets[] and update info.
@@ -182,5 +298,24 @@
 		}
 		
 	 });
+	 
+	 
+	 
+	 
+	$(document).ready(function(){
+	
+		$("*[data-scrollsticky=on],*[data-scrollsticky=true]").each(function(){
+			
+			$(this).scrollSticky({
+				offset: 			parseInt($(this).attr('data-scrollsticky-offset')) || null,
+				clearfix:			$(this).attr('data-scrollsticky-clearfix') || null,
+				clearfixOffset: 	parseInt($(this).attr('data-scrollsticky-clearfix-offset')) || null
+			});
+			
+		});
+		
+	});	 
+	 
+	 
 	
 })(jQuery);
